@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div id="dropArea" style="padding: 50px; text-align: center; background-color: #eee;">
+    Drag here
+</div>
+
+<div id="result">
+
+</div>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+    $(function() {
+        $('#dropArea').on(
+                'dragover',
+                function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+        )
+        $('#dropArea').on(
+                'dragenter',
+                function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+        );
+        $('#dropArea').on(
+                'drop',
+                function(e){
+                    if(e.originalEvent.dataTransfer){
+                        var data = JSON.parse(e.originalEvent.dataTransfer.getData('text'));
+                        console.log(data);
+                        $('#result').append('<div><h1>Received data:</h1><p><strong>Boolean value:</strong>'+data.booleanData+'</p>' +
+                                '<p><strong>Integer value:</strong>'+data.intData+'</p>'+
+                                '</div>');
+                    }
+                }
+        );
+    });
+</script>
+</body>
+</html>
