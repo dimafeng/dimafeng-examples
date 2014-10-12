@@ -23,15 +23,13 @@
                     e.preventDefault();
                     e.stopPropagation();
                 }
-        )
-        $('#dropArea').on(
+        ).on(
                 'dragenter',
                 function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
-        );
-        $('#dropArea').on(
+        ).on(
                 'drop',
                 function(e){
                     if(e.originalEvent.dataTransfer){
