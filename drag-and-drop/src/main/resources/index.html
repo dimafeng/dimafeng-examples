@@ -35,6 +35,9 @@
                 'drop',
                 function(e){
                     if(e.originalEvent.dataTransfer){
+                        e.preventDefault();
+                        e.stopPropagation();
+
                         var data = JSON.parse(e.originalEvent.dataTransfer.getData('text'));
                         console.log(data);
                         $('#result').append('<div><h1>Received data:</h1><p><strong>Boolean value:</strong>'+data.booleanData+'</p>' +

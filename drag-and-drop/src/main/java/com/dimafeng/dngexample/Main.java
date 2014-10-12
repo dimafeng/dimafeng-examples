@@ -17,16 +17,16 @@ public class Main extends JFrame {
     public Main() {
         JPanel panel = new JPanel();
 
-        DragSource ds = new DragSource();
-        JButton test = new JButton("Draggable button");
-        ds.createDefaultDragGestureRecognizer(
-                test,
+        JButton btn = new JButton("Draggable button");
+
+        new DragSource().createDefaultDragGestureRecognizer(
+                btn,
                 DnDConstants.ACTION_COPY_OR_MOVE,
                 (DragGestureEvent event) -> {
                     event.startDrag(DragSource.DefaultLinkDrop, new TransferData());
                 });
 
-        panel.add(test);
+        panel.add(btn);
         add(panel);
 
         pack();
