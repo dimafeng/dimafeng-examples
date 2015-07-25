@@ -1,4 +1,5 @@
 rootProject.name = 'dimafeng-examples'
 
 include 'drag-and-drop'
+include 'transactional'
 
