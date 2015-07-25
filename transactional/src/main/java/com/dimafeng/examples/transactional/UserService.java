@@ -1,8 +1,5 @@
 package com.dimafeng.examples.transactional;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,7 +12,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import javax.transaction.SystemException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -41,17 +37,17 @@ public class UserService {
     DataSource dataSource;
 
     @Transactional
-    public void transactional(int base) {
-        IntStream.range(0, count).forEach(i -> repository.save(new User(String.valueOf(base + i))));
+    public void transactional() {
+        IntStream.range(0, count).forEach(i -> repository.save(new User("name")));
     }
 
-    public void transactionManager(int base) {
+    public void transactionManager() {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus transactionStatus = null;
         try {
             transactionStatus = transactionManager.getTransaction(def);
-            IntStream.range(0, count).forEach(i -> repository.save(new User(String.valueOf(base + i))));
+            IntStream.range(0, count).forEach(i -> repository.save(new User("name")));
             transactionManager.commit(transactionStatus);
         } catch (Exception e) {
             if (transactionStatus != null) {
@@ -61,14 +57,14 @@ public class UserService {
         }
     }
 
-    public void jdbc(int base) {
+    public void jdbc() {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO User (name) VALUES (?)")) {
 
                 IntStream.range(0, count).forEach(i -> {
                     try {
-                        preparedStatement.setString(1, String.valueOf(base + i));
+                        preparedStatement.setString(1, "name");
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -83,11 +79,11 @@ public class UserService {
         }
     }
 
-    public void entityManager(int base) {
+    public void entityManager() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             entityManager.getTransaction().begin();
-            IntStream.range(0, count).forEach(i -> entityManager.persist(new User(String.valueOf(base + i))));
+            IntStream.range(0, count).forEach(i -> entityManager.persist(new User("name")));
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();

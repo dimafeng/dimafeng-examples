@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,33 +35,33 @@ public class Application {
         service.cleanTable();
 
         IntStream.range(0, 1000).forEach(i -> {
-            service.jdbc(1);
+            service.jdbc();
             service.cleanTable();
 
-            service.entityManager(1);
+            service.entityManager();
             service.cleanTable();
 
-            service.transactionManager(1);
+            service.transactionManager();
             service.cleanTable();
 
-            service.transactional(1);
+            service.transactional();
             service.cleanTable();
         });
 
-        Stream.of(1, 10, 100, 1000, 10000).forEach(count -> {
+        Stream.of(1, 10, 100, 1_000, 10_000, 50_000).forEach(count -> {
             System.out.println("Count = " + count);
 
             System.out.println("JDBC");
-            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.jdbc(i * 1000)));
+            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.jdbc()));
 
             System.out.println("Entity Manager");
-            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.entityManager(i * 1000)));
+            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.entityManager()));
 
             System.out.println("Transaction Manager");
-            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.transactionManager(i * 1000)));
+            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.transactionManager()));
 
             System.out.println("Transactional");
-            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.transactional(i * 1000)));
+            doIt(service, () -> IntStream.range(0, count).forEach(i -> service.transactional()));
 
             System.out.println();
         });
@@ -73,7 +72,7 @@ public class Application {
     static void doIt(UserService service, Runnable r) {
         try {
             CompletableFuture.runAsync(() -> {
-                List<Long> data = IntStream.range(0, 10)
+                List<Long> data = IntStream.range(0, 20)
                         .mapToObj(i -> {
                             long val = System.currentTimeMillis();
                             r.run();
