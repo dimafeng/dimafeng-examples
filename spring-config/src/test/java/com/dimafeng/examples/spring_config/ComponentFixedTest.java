@@ -18,8 +18,7 @@ public class ComponentFixedTest {
     SimpleBeanConsumer consumer;
 
     @Test
-    public void test()
-    {
+    public void test() {
         assertNotNull(consumer);
     }
 
@@ -30,14 +29,12 @@ public class ComponentFixedTest {
         SimpleBean simpleBean;
 
         @Bean
-        public SimpleBean simpleBean()
-        {
+        public SimpleBean simpleBean() {
             return new SimpleBean();
         }
 
         @Bean
-        public SimpleBeanConsumer simpleBeanConsumer()
-        {
+        public SimpleBeanConsumer simpleBeanConsumer() {
             return new SimpleBeanConsumer(simpleBean);
         }
     }

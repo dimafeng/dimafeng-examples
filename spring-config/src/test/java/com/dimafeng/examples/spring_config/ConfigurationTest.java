@@ -19,8 +19,7 @@ public class ConfigurationTest {
     SimpleBeanConsumer consumer;
 
     @Test
-    public void test()
-    {
+    public void test() {
         assertNotNull(consumer);
     }
 
@@ -28,14 +27,12 @@ public class ConfigurationTest {
     public static class Config {
 
         @Bean
-        public SimpleBean simpleBean()
-        {
+        public SimpleBean simpleBean() {
             return new SimpleBean();
         }
 
         @Bean
-        public SimpleBeanConsumer simpleBeanConsumer()
-        {
+        public SimpleBeanConsumer simpleBeanConsumer() {
             return new SimpleBeanConsumer(simpleBean());
         }
     }
