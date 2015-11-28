@@ -3,4 +3,4 @@ rootProject.name = 'dimafeng-examples'
 include 'drag-and-drop'
 include 'transactional'
 include 'spring-config'
-
+include 'dynamic-bean-def'
