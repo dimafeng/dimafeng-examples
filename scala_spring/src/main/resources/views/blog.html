@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+
+<h1>{{blog.name}}</h1>
+<div>{{blog.body}}</div>
+
+<div><strong>Categories:</strong>
+    {% for l in categories %}
+    <a href="{{l.url}}">{{l.title}}</a>
+    {% endfor %}
+</div>
+
+{% endblock %}

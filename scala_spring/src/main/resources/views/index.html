@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block mainContent %}
+
+{% for link in blogs %}
+<div>
+    <a href="{{link.url}}">{{link.title}}</a>
+</div>
+{% endfor %}
+
+{% endblock %}
