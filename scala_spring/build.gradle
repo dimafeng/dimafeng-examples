@@ -5,6 +5,7 @@ ext.scalaVersion = '2.11.7'
 ext.jacksonScalaVersion = '2.6.3'
 ext.jtwigVersion = '3.1.1'
 ext.casbahVersion = '3.1.0'
+ext.scalaLoggingVersion = '2.1.2'
 
 jar {
     baseName = 'scala_spring'
@@ -23,6 +24,7 @@ dependencies {
             "org.scala-lang:scala-library:${scalaVersion}",
             "com.lyncode:jtwig-spring:$jtwigVersion",
             "org.mongodb:casbah-core_2.11:$casbahVersion",
-            "org.mongodb:casbah-commons_2.11:$casbahVersion")
+            "org.mongodb:casbah-commons_2.11:$casbahVersion",
+            "com.typesafe.scala-logging:scala-logging-slf4j_2.11:$scalaLoggingVersion",)
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }

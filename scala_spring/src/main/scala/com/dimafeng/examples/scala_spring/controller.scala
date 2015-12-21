@@ -4,6 +4,7 @@ import com.dimafeng.examples.scala_spring.controller.Controller._
 import com.dimafeng.examples.scala_spring.model.{BlogPost, Category, User}
 import com.dimafeng.examples.scala_spring.service.{BlogPostService, CategoryService, UserService}
 import com.dimafeng.examples.scala_spring.utils.JavaUtils._
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation._
@@ -47,12 +48,16 @@ class CategoryRestController @Autowired()(categoryService: CategoryService) {
 
 @Controller
 @RequestMapping(Array("/"))
-class MainController @Autowired()(blogPostService: BlogPostService, categoryService: CategoryService) {
+class MainController @Autowired()(blogPostService: BlogPostService,
+                                  categoryService: CategoryService) extends LazyLogging {
 
   @RequestMapping(Array(""))
-  def mainPage() = MV("index", Map(
-    "blogs" -> blogPostService.linksToAllBlogPosts()
-  ))
+  def mainPage() = {
+    logger.info("Main page")
+    MV("index", Map(
+      "blogs" -> blogPostService.linksToAllBlogPosts()
+    ))
+  }
 
   @RequestMapping(Array(BLOG_POST_MAPPING))
   def mainPage(@PathVariable blogId: String) = {
@@ -65,8 +70,8 @@ class MainController @Autowired()(blogPostService: BlogPostService, categoryServ
 
   @RequestMapping(Array(CATEGORY_MAPPING))
   def category(@PathVariable categoryId: String) = MV("category", Map(
-      "blogs" -> blogPostService.blogPostsByCategoryId(categoryId)
-    ))
+    "blogs" -> blogPostService.blogPostsByCategoryId(categoryId)
+  ))
 }
 
 object Controller {
