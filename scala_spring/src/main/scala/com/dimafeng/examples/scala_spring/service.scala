@@ -4,8 +4,11 @@ import com.dimafeng.examples.scala_spring.controller.Controller._
 import com.dimafeng.examples.scala_spring.dao.{BlogPostRepository, CategoryRepository, UserRepository}
 import com.dimafeng.examples.scala_spring.model.{Model, BlogPost, Category, User}
 import com.dimafeng.examples.scala_spring.service.Link._
+import com.typesafe.scalalogging.slf4j.LazyLogging
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.{Aspect, Around, Pointcut}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.{Component, Service}
 
 import scala.collection.JavaConverters._
 
@@ -54,6 +57,17 @@ class CategoryService @Autowired()(categoryRepository: CategoryRepository) {
   }
 
   def add(category: Category) = categoryRepository.save(Category(category.name))
+}
+
+@Aspect
+@Component
+class ControllerAspect extends LazyLogging {
+
+  @Around("execution(* com.dimafeng.examples.scala_spring.service.BlogPostService.*(..))")
+  def menuConsumer(pjp: ProceedingJoinPoint): Object = {
+    logger.info("Handled: {}", pjp.toString)
+    pjp.proceed()
+  }
 }
 
 case class Link(title: String, url: String)

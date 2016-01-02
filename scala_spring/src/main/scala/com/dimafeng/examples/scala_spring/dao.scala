@@ -52,7 +52,7 @@ object Mongo {
     }
 
     def toUpdateWithLock: BasicUpdate = {
-      new BasicUpdate(MO() ++ $inc("version" -> 1) ++ dbObject)
+      new BasicUpdate($inc("version" -> 1) ++ dbObject)
     }
 
     def toUpdate: BasicUpdate = {

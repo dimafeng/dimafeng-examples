@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.lyncode.jtwig.mvc.JtwigViewResolver
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.web.servlet.ViewResolver
 
 
-object Application extends App {
+object Application extends App with LazyLogging {
+  logger.info("App is being started with {}", args)
   SpringApplication.run(classOf[Application], args: _*)
 }
 

@@ -5,8 +5,10 @@ import com.dimafeng.examples.scala_spring.model.{BlogPost, Category, User}
 import com.dimafeng.examples.scala_spring.service.{BlogPostService, CategoryService, UserService}
 import com.dimafeng.examples.scala_spring.utils.JavaUtils._
 import com.typesafe.scalalogging.slf4j.LazyLogging
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.{Pointcut, Aspect, Around}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
+import org.springframework.stereotype.{Component, Controller}
 import org.springframework.web.bind.annotation._
 import org.springframework.web.servlet.ModelAndView
 
@@ -72,6 +74,21 @@ class MainController @Autowired()(blogPostService: BlogPostService,
   def category(@PathVariable categoryId: String) = MV("category", Map(
     "blogs" -> blogPostService.blogPostsByCategoryId(categoryId)
   ))
+}
+
+//@Aspect
+//@Component
+class ControllerAspect extends LazyLogging {
+
+  @Pointcut("@within(org.springframework.stereotype.Controller)")
+  def anyPublicMethod() = {
+  }
+
+  @Around("anyPublicMethod()")
+  def menuConsumer(pjp: ProceedingJoinPoint): Object = {
+    logger.info("Handled: {}", pjp.toString)
+    pjp.proceed()
+  }
 }
 
 object Controller {
