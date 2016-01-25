@@ -1,5 +1,7 @@
 package com.dimafeng.examples.scala_spring
 
+import java.util
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,8 +10,11 @@ import com.lyncode.jtwig.mvc.JtwigViewResolver
 import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.{Configuration, Bean}
+import org.springframework.http.converter.HttpMessageConverter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.servlet.ViewResolver
+import org.springframework.web.servlet.config.annotation.{WebMvcConfigurerAdapter, EnableWebMvc}
 
 
 object Application extends App with LazyLogging {
@@ -18,10 +23,20 @@ object Application extends App with LazyLogging {
 }
 
 @SpringBootApplication
-class Application {
-  /**
-    * Custom Jackson mapper
-    */
+class Application
+
+@Configuration
+@EnableWebMvc
+class WebConfig extends WebMvcConfigurerAdapter {
+
+  @Bean
+  def jackson2HttpMessageConverter(): MappingJackson2HttpMessageConverter =
+    new MappingJackson2HttpMessageConverter(objectMapper())
+
+  override def configureMessageConverters(converters: util.List[HttpMessageConverter[_]]): Unit = {
+    converters.add(jackson2HttpMessageConverter())
+  }
+
   @Bean
   def objectMapper(): ObjectMapper = {
     new ObjectMapper() {
