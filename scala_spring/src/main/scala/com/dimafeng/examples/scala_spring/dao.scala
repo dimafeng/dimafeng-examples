@@ -8,7 +8,7 @@ import com.mongodb.casbah.commons.MongoDBObject
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.{BasicQuery, BasicUpdate}
+import org.springframework.data.mongodb.core.query.{BasicQuery, BasicUpdate, Update}
 import org.springframework.data.mongodb.repository.Query
 import org.springframework.data.repository.PagingAndSortingRepository
 
@@ -22,15 +22,15 @@ trait BlogPostRepository extends PagingAndSortingRepository[BlogPost, String] wi
 
 trait BlogPostRepositoryCustom {
 
-  def addCategoryToBlogPostId(blogPostId: String, categoryId: Array[String])
+  def addCategoryToBlogPostId(blogPostId: String, categoryId: String)
 }
 
 class BlogPostRepositoryImpl @Autowired()(mongoTemplate: MongoTemplate) extends BlogPostRepositoryCustom {
 
-  override def addCategoryToBlogPostId(blogPostId: String, categoryId: Array[String]): Unit =
+  override def addCategoryToBlogPostId(blogPostId: String, categoryId: String): Unit =
     mongoTemplate.findAndModify(
       MO("_id" -> new ObjectId(blogPostId)).toQuery,
-      $addToSet("categoryIds" -> categoryId).toUpdateWithLock,
+      $addToSet("categoryIds" -> categoryId).toUpdate,
       classOf[BlogPost])
 
 }
@@ -51,12 +51,6 @@ object Mongo {
       new BasicQuery(dbObject)
     }
 
-    def toUpdateWithLock: BasicUpdate = {
-      new BasicUpdate($inc("version" -> 1) ++ dbObject)
-    }
-
-    def toUpdate: BasicUpdate = {
-      new BasicUpdate(dbObject)
-    }
+    def toUpdate: Update = Update.fromDBObject(dbObject)
   }
 }

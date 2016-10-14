@@ -39,7 +39,7 @@ class BlogPostService @Autowired()(blogPostRepository: BlogPostRepository) {
     blogPostRepository.save(BlogPost(blogPost.name, blogPost.body, blogPost.categoryIds))
 
   def addCategoryToBlog(blogPostId: String, categoryIds: Array[String]): Unit =
-    blogPostRepository.addCategoryToBlogPostId(blogPostId, categoryIds)
+    categoryIds.foreach(blogPostRepository.addCategoryToBlogPostId(blogPostId, _))
 }
 
 @Service
